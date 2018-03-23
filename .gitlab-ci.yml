@@ -1,0 +1,29 @@
+variables:
+  GIT_SSL_NO_VERIFY: "true"
+before_script:
+
+stages:
+    - build
+    - test
+
+build:
+    image: python:2-alpine
+    stage: build
+    cache:
+      key: site-packages
+      paths:
+        - /usr/local/lib/python2.7/site-packages
+    script:
+        - pip install -r requirements/base.txt
+
+test:
+    image: python:2-alpine
+    stage: test
+    cache:
+      key: site-packages
+      paths:
+        - /usr/local/lib/python2.7/site-packages
+    script:
+        - pip install -r requirements/test.txt
+        - python -m unittest discover
+        - py.test --cov=lib
